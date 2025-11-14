@@ -7,7 +7,7 @@ import json
 import uuid
 import datetime as dt
 
-# Init Variables and Functions
+# Init Variables and Configs
 class file:
     cwd = Path.cwd()
     src = cwd / "src"
@@ -42,10 +42,30 @@ class file:
 class configs:
     parser = parse.ArgumentParser(prog="taskwiz")
 
-# Main
-class Main:
+# Main Functions
+class taskwiz:
     def __init__(self):
         self.db = file.db
-        self.log = file.logf
-        self.log_e = file.errors
+        self.log_file = file.logf
+        self.error_f = file.errors
     
+    def add(taskname):
+        pass
+    
+    def list():
+        pass
+
+    def remove():
+        pass
+    
+    def done():
+        pass
+
+    def clear():
+        pass
+
+    def GetTaskByID():
+        pass
+
+    def GetTaskByName():
+        pass
