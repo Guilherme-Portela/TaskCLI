@@ -24,9 +24,11 @@ class file:
         if not Path.exists(logd):
             Path.mkdir(logd, parents=True)
             with open(logf, 'w') as f:
-                pass
+                dh = dt.now()
+                f.write(f"[{dh.strftime("%d/%m/%Y") } - {dh.strftime("%H:%M:%S")}] - Create log file")
             with open(errors, 'w') as f:
-                pass
+                dh = dt.now()
+                f.write(f"[{dh.strftime("%d/%m/%Y") } - {dh.strftime("%H:%M:%S")}] - Create errors log file")
         else:
             if not Path.exists(logf):
                 with open(logf, 'w') as f:
@@ -48,13 +50,35 @@ class taskwiz:
         with open(file.db, 'r') as f:
             self.db = json.load(f)
         with open(file.logf, 'r') as f:
-            self.log_file = f
+            self.log_file = f.read()
         with open(file.errors, 'r') as f:
-            self.error_f = f
+            self.error_f = f.read()
+
+    def log(self:None, msg:str):
+        dh = dt.datetime.now()
+        time = dh.strftime("%H-%M-%S")
+        data = dh.strftime("%d-%m-%Y")
+        with open(file.logf) as f:
+            f.write(f"[{data}: {time}] - {msg}")
+
+    def error_log(self:None, msg:str, error_type:str):
+        dh = dt.datetime.now()
+        time = dh.strftime("%H-%M-%S")
+        data = dh.strftime("%d-%m-%Y")
+        with open(file.errors) as f:
+            f.write(f"[{data} | {time}]: {error_type} - {msg}")
     
+
     def add(self, taskname:str):
-        print(str(type(self.db)))
-        print(self.db)
+        try:
+            id = len(self.db["tasks"])
+            self.db["tasks"][str(id)] = taskname
+            with open(file.db, 'w') as f:
+                json.dump(self.db, f, indent=4)
+            taskwiz.log(taskwiz, f"Task added. ID:{id}")
+            print(f"Task added sucessfully! ID: {id} Task Name: {taskname}")
+        except Exception as e:
+            pass
 
 
     def list():
@@ -75,4 +99,6 @@ class taskwiz:
     def GetTaskByName():
         pass
 
-taskwiz.add(self="", taskname="Watch Star Wars VIII")
+inst = taskwiz()
+
+inst.add("Watch Star Wars VII")
