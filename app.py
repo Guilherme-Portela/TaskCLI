@@ -45,13 +45,18 @@ class configs:
 # Main Functions
 class taskwiz:
     def __init__(self):
-        self.db = file.db
-        self.log_file = file.logf
-        self.error_f = file.errors
+        with open(file.db, 'r') as f:
+            self.db = json.load(f)
+        with open(file.logf, 'r') as f:
+            self.log_file = f
+        with open(file.errors, 'r') as f:
+            self.error_f = f
     
-    def add(taskname):
-        pass
-    
+    def add(self, taskname:str):
+        print(str(type(self.db)))
+        print(self.db)
+
+
     def list():
         pass
 
@@ -69,3 +74,5 @@ class taskwiz:
 
     def GetTaskByName():
         pass
+
+taskwiz.add(self="", taskname="Watch Star Wars VIII")
