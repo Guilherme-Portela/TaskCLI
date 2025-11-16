@@ -4,7 +4,6 @@ import sys
 import argparse as parse
 from pathlib import Path
 import json
-import uuid
 import datetime as dt
 
 # Init Variables and Configs
@@ -26,9 +25,11 @@ class file:
             with open(logf, 'w') as f:
                 dh = dt.now()
                 f.write(f"[{dh.strftime("%d/%m/%Y") } - {dh.strftime("%H:%M:%S")}] - Create log file")
+                f.close()
             with open(errors, 'w') as f:
                 dh = dt.now()
                 f.write(f"[{dh.strftime("%d/%m/%Y") } - {dh.strftime("%H:%M:%S")}] - Create errors log file")
+                f.close()
         else:
             if not Path.exists(logf):
                 with open(logf, 'w') as f:
@@ -49,10 +50,13 @@ class taskwiz:
     def __init__(self):
         with open(file.db, 'r') as f:
             self.db = json.load(f)
+            f.close()
         with open(file.logf, 'r') as f:
             self.log_file = f.read()
+            f.close()
         with open(file.errors, 'r') as f:
             self.error_f = f.read()
+            f.close()
 
     def log(self:None, msg:str):
         dh = dt.datetime.now()
@@ -60,34 +64,54 @@ class taskwiz:
         data = dh.strftime("%d-%m-%Y")
         with open(file.logf) as f:
             f.write(f"[{data}: {time}] - {msg}")
+            f.close()
 
-    def error_log(self:None, msg:str, error_type:str):
+    def error_log(self:None, error_type):
         dh = dt.datetime.now()
         time = dh.strftime("%H-%M-%S")
         data = dh.strftime("%d-%m-%Y")
         with open(file.errors) as f:
-            f.write(f"[{data} | {time}]: {error_type} - {msg}")
+            f.write(f"[{data} | {time}]: {error_type}")
+            f.close()
     
 
     def add(self, taskname:str):
         try:
             id = len(self.db["tasks"])
+            if id < 100:
+                id = "0" + str(id)
+            else:
+                id = len(self.db["tasks"])
+
             self.db["tasks"][str(id)] = taskname
             with open(file.db, 'w') as f:
                 json.dump(self.db, f, indent=4)
+                f.close()
             taskwiz.log(taskwiz, f"Task added. ID:{id}")
-            print(f"Task added sucessfully! ID: {id} Task Name: {taskname}")
+            print(f"Task added sucessfully! ID: {id} Task Name: {taskname} ✔")
         except Exception as e:
-            pass
+            taskwiz.error_log(e)
+            print(f"ERROR: {e} ❌")
 
+    def list(self:None):
+        try:
+            print("ID     Task")
+            for i in self.db["tasks"]:
+                print(f"{i}      {self.db["tasks"][i]}")
+        except Exception as e:
+            print(f"ERROR: {e} ❌")
 
-    def list():
-        pass
+    def remove(self:None, ID):
+        try:
+            del self.db["tasks"][ID]
+            with open(file.db, 'w') as f:
+                json.dump(self.db, f, indent=4)
+                f.close()
+            print("Removed Task Sucessfully ✅")
+        except Exception as e:
+            print(f"ERROR: {e} ❌")
 
-    def remove():
-        pass
-    
-    def done():
+    def done(self:None, ID):
         pass
 
     def clear():

@@ -1,7 +1,7 @@
 {
     "tasks": {
-        "0": "Clean my Room",
-        "1": "Buy food",
-        "2": "Buy Victoria girlfriend's day gift"
+        "00": "Clean my Room",
+        "01": "Buy food",
+        "02": "Buy Victoria girlfriend's day gift"
     }
 }
