@@ -1,7 +1,7 @@
 # Import libs
 import os
 import sys
-import argparse as parse
+import argparse
 from pathlib import Path
 import json
 import datetime as dt
@@ -42,7 +42,6 @@ class file:
                     pass
             else:
                 pass
-# class configs:
 
 # Main Functions
 class taskwiz:
@@ -76,7 +75,7 @@ class taskwiz:
         print(f"An error has occurred: {error_type}")
     
 
-    def add(self, taskname:str):
+    def add(self:None, taskname:str):
         try:
             id = len(self.db["tasks"])
             if id < 100:
@@ -173,3 +172,18 @@ class taskwiz:
         print(f"LV (Level): {self.profile["level"]}")
         print(f"XP: {self.profile["xp"]}")
         print(f"To next upgrade: {self.profile["xp"]}/{self.profile["to_up"]}")
+
+class configs:
+    parser = argparse.ArgumentParser(prog="Task Wizard CLI", description="A simples CLI task manager.", )
+    subparsers = parser.add_subparsers(dest='command', required=True)
+    parser_add = subparsers.add_parser('add', help='Add a new task')
+    parser_done = subparsers.add_parser('done', help='Complete a task using your ID, your give 10 XP for each task done')
+    parser_remove = subparsers.add_parser('remove', help='Remove a task by ID')
+    parser_list = subparsers.add_parser('list', help='List all tasks')
+    parser_clear = subparsers.add_parser('clear', help='Clean all tasks')
+
+    parser_add.set_defaults(func=taskwiz.add)
+    parser_done.set_defaults(func=taskwiz.done)
+    parser_remove.set_defaults(func=taskwiz.remove)
+    parser_list.set_defaults(func=taskwiz.list)
+    parser_clear.set_defaults(func=taskwiz.clear)
