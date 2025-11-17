@@ -42,8 +42,7 @@ class file:
                     pass
             else:
                 pass
-class configs:
-    parser = parse.ArgumentParser(prog="taskwiz")
+# class configs:
 
 # Main Functions
 class taskwiz:
@@ -57,6 +56,7 @@ class taskwiz:
         with open(file.errors, 'r') as f:
             self.error_f = f.read()
             f.close()
+        self.profile = self.db["profile"]
 
     def log(self:None, msg:str):
         dh = dt.datetime.now()
@@ -73,6 +73,7 @@ class taskwiz:
         with open(file.errors) as f:
             f.write(f"[{data} | {time}]: {error_type}")
             f.close()
+        print(f"An error has occurred: {error_type}")
     
 
     def add(self, taskname:str):
@@ -91,7 +92,6 @@ class taskwiz:
             print(f"Task added sucessfully! ID: {id} Task Name: {taskname} ✔")
         except Exception as e:
             taskwiz.error_log(e)
-            print(f"ERROR: {e} ❌")
 
     def list(self:None):
         try:
@@ -112,17 +112,64 @@ class taskwiz:
             print(f"ERROR: {e} ❌")
 
     def done(self:None, ID):
-        pass
+        try:
+            del self.db["tasks"][ID]
+            self.profile["xp"] += 10
+            if self.profile["xp"] >= self.profile["to_up"]:
+                self.profile["level"] += 1
+                self.profile["to_up"] *= 1
+                print("Congratulations! You done a task ✅")
+                print("You get 10 XP!")
+                print(f"YOU LEVED UP!!! From level {self.profile["level"] - 1} to {self.profile["level"]}")
+                print(f"Now you need {self.profile["to_up"]} to upgrade to {self.profile["level"] + 1}")
+            else:
+                print("Congratulations! You done a task ✅")
+                print("You get 10 XP!")
+            with open(file.db, 'w') as f:
+                json.dump(self.db, f, indent=4)
+                f.close()
+        except Exception as e:
+            taskwiz.error_log(e)
 
-    def clear():
-        pass
+    def clear(self:None):
+        while True:
+            confirmation = input("Are you sure you want to remove all your tasks? [Y/N]: ")
+            match confirmation.lower():
+                case "y":
+                    self.db["tasks"] = {}
+                    with open(file.db, 'w') as f:
+                        json.dump(self.db, f)
+                        f.close()
+                    print("All tasks are removed")
+                    break
+                case "n":
+                    print("Operation canceled")
+                    break
+                case _:
+                    print(f"What is {confirmation}?")
+                    print("You can only write Y or N! Try again")
+    
+    def GetTaskByID(self:None, ID):
+        print(self.db["tasks"][ID])
 
-    def GetTaskByID():
-        pass
-
-    def GetTaskByName():
-        pass
-
-inst = taskwiz()
-
-inst.add("Watch Star Wars VII")
+    def GetTaskByName(self:None, name):
+        length = len(self.db["tasks"])
+        count = 0
+        if length > 0:
+            while count < length:
+                for i in self.db["tasks"]:
+                    if self.db["tasks"][i] == name:
+                        print(f"ID: {i}")
+                        print(f"Task: {self.db["tasks"][i]}")
+                        break
+                    elif i != name:
+                        count += 1
+                        pass
+        else:
+            print("No tasks for search, add tasks using command \033[1m add")
+    
+    def profile(self:None):
+        print(f"Name: {os.getlogin()}")
+        print(f"LV (Level): {self.profile["level"]}")
+        print(f"XP: {self.profile["xp"]}")
+        print(f"To next upgrade: {self.profile["xp"]}/{self.profile["to_up"]}")

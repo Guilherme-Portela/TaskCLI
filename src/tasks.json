@@ -1,7 +1,9 @@
 {
     "tasks": {
-        "00": "Clean my Room",
-        "01": "Buy food",
-        "02": "Buy Victoria girlfriend's day gift"
+    },
+    "profile": {
+        "to_up": "100",
+        "xp": "0",
+        "level": "1"
     }
 }
