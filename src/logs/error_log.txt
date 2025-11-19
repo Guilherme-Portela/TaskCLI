@@ -1,0 +1,12 @@
+[19/11/2025 - 16:21:48] - Create errors log file
+[19-11-2025 | 16-21-48]: [Errno 2] No such file or directory
+[19-11-2025 | 16-21-59]: [Errno 2] No such file or directory
+[19-11-2025 | 16-28-06]: taskwiz.get() got an unexpected keyword argument 'task_id'
+[19-11-2025 | 16-29-02]: taskwiz.get() got an unexpected keyword argument 'task_id'
+[19-11-2025 | 16-29-10]: taskwiz.get() got an unexpected keyword argument 'task_id'
+[19-11-2025 | 16-29-36]: taskwiz.get() got an unexpected keyword argument 'task_id'
+[19-11-2025 | 16-31-41]: '0'
+[19-11-2025 | 16-31-45]: '0'
+[19-11-2025 | 16-31-55]: '0'
+[19-11-2025 | 16-32-28]: '0'
+[19-11-2025 | 16-33-01]: 0
